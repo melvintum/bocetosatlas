@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuota de Venta · Boceto v2 · Proyecto Atlas</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css">
+<style>
+:root {
+  /* Paleta corporativa */
+  --c-primary: #172c59;
+  --c-secondary: #1674f7;
+  --c-accent: #83c853;
+  --c-warning: #f77716;
+  --c-danger: #9f282c;
+  --c-dark: #010f3a;
+
+  /* Colores por año */
+  --c-2025: #00B0F0;
+  --c-2025-25: #BFE7F9;
+  --c-2025-08: #EAF6FC;
+  --c-2025-bg: #F2EDE2;
+  --c-2025-text: #5A4014;
+
+  --c-2026: #92D050;
+  --c-2026-25: #DCEFC8;
+  --c-2026-08: #F2F9EA;
+
+  --c-2027: #7030A0;
+  --c-2027-25: #D2BFE3;
+  --c-2027-08: #EFE7F5;
+  --c-2027-12: #E5D6EF;
+
+  /* Neutros */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f5;
+  --bg-tertiary: #efede6;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5f5e5a;
+  --text-tertiary: #888780;
+  --border-tertiary: rgba(0,0,0,0.10);
+  --border-secondary: rgba(0,0,0,0.18);
+
+  --radius-md: 8px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.app-shell { max-width: 1920px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 14px 20px;
+  background: var(--c-primary);
+  color: white;
+  border-radius: var(--radius-md);
+}
+.app-title { display: flex; align-items: center; gap: 14px; }
+.app-title h1 { font-size: 18px; font-weight: 500; margin: 0; }
+.app-title .breadcrumb { font-size: 11px; color: rgba(255,255,255,0.7); }
+.user-info { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 500; font-size: 12px;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 0.5px solid var(--border-tertiary); }
+.tab {
+  padding: 10px 16px; font-size: 13px; color: var(--text-secondary);
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab.active { color: var(--c-primary); font-weight: 500; border-bottom-color: var(--c-primary); }
+
+/* Status banner */
+.status-banner {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-tertiary);
+  border-left: 3px solid var(--c-warning);
+  border-radius: var(--radius-md);
+  padding: 12px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: space-between; font-size: 13px;
+}
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--c-2025-bg);
+  color: var(--c-2025-text);
+  margin-right: 8px;
+}
+
+.saved-indicator {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--c-accent); margin-left: 12px;
+}
+.saved-indicator i { font-size: 14px; }
+
+/* Toolbar */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; background: var(--bg-primary);
+  padding: 12px 16px; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-tertiary);
+}
+.toolbar-left { display: flex; align-items: center; gap: 10px; }
+.toolbar-left select {
+  font-size: 13px; padding: 6px 28px 6px 12px;
+  border: 0.5px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary); font-family: inherit; cursor: pointer;
+}
+.toolbar-right { display: flex; gap: 8px; }
+
+button {
+  font-family: inherit; font-size: 13px; padding: 6px 12px;
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+button:hover { background: var(--bg-secondary); }
+button.primary {
+  background: var(--c-secondary); color: white;
+  border-color: var(--c-secondary);
+}
+button.primary:hover { background: #105ed4; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card {
+  background: var(--bg-primary); border-radius: var(--radius-md);
+  padding: 14px 16px; border: 0.5px solid var(--border-tertiary);
+}
+.stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.stat-value { font-size: 19px; font-weight: 500; }
+.stat-value.cuota { color: var(--c-2027); }
+.stat-value.positive { color: var(--c-accent); }
+
+/* Scroll hint */
+.scroll-hint {
+  font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Grid */
+.grid-container {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.grid-scroll { overflow-x: auto; }
+.grid-table {
+  border-collapse: separate; border-spacing: 0;
+  font-size: 11px; width: max-content; min-width: 100%;
+}
+.grid-table th, .grid-table td {
+  padding: 5px 6px;
+  border-bottom: 0.5px solid var(--border-tertiary);
+  border-right: 0.5px solid var(--border-tertiary);
+  white-space: nowrap; background: var(--bg-primary);
+}
+.grid-table thead th { background: var(--bg-secondary); font-weight: 500; }
+
+/* Year headers */
+.h-year-2025 { background: var(--c-2025) !important; color: white; text-align: center; font-size: 10px; font-weight: 500; }
+.h-year-2026 { background: var(--c-2026) !important; color: #1a1a1a; text-align: center; font-size: 10px; font-weight: 500; }
+.h-year-2027 { background: var(--c-2027) !important; color: white; text-align: center; font-size: 10px; font-weight: 500; }
+
+/* Sub headers (Un | Q) */
+.h-sub-2025 { background: var(--c-2025-25) !important; color: #034e6c; text-align: center; font-size: 10px; font-weight: 400; }
+.h-sub-2026 { background: var(--c-2026-25) !important; color: #3a5a18; text-align: center; font-size: 10px; font-weight: 400; }
+.h-sub-2027 { background: var(--c-2027-25) !important; color: #3d1858; text-align: center; font-size: 10px; font-weight: 500; }
+
+/* Month header (groups Un | Q for each year) */
+.h-month { background: var(--bg-tertiary) !important; text-align: center; font-weight: 600; font-size: 11px; color: var(--c-primary); }
+
+/* Sticky columns */
+.sticky-col {
+  position: sticky; background: var(--bg-primary); z-index: 1;
+}
+.sticky-col-1 { left: 0; min-width: 180px; }
+.sticky-col-2 { left: 180px; min-width: 200px; }
+.sticky-col-3 { left: 380px; min-width: 90px; }
+.grid-table thead .sticky-col { z-index: 3; background: var(--bg-secondary); }
+.sticky-col.last { border-right: 2px solid var(--c-primary); }
+
+/* Data cells by year */
+.c-2025 { background: var(--c-2025-08); }
+.c-2026 { background: var(--c-2026-08); }
+.c-2027 { background: var(--c-2027-08); }
+
+.cell-un { text-align: right; font-size: 10px; color: var(--text-secondary); }
+.cell-q  { text-align: right; font-size: 10px; color: var(--text-secondary); }
+
+/* 2027 editable */
+.cell-input {
+  text-align: right;
+  background: #FFFAEF;
+  padding: 2px 4px;
+  min-width: 55px;
+  max-width: 60px;
+  width: 60px;
+}
+.cell-input input {
+  width: 100%; border: none; background: transparent;
+  font-family: inherit; font-size: 11px; text-align: right;
+  padding: 3px 4px; border-radius: 3px; color: var(--c-2027); font-weight: 500;
+}
+.cell-input input:focus {
+  outline: 1.5px solid var(--c-warning);
+  background: white;
+}
+
+/* 2027 calculated (Q) */
+.cell-calc {
+  text-align: right;
+  background: var(--c-2027-12);
+  color: var(--c-2027);
+  font-weight: 500;
+  font-size: 10px;
+}
+
+/* Divider between years inside the same month */
+.div-year { border-right: 1px dashed rgba(0,0,0,0.15) !important; }
+/* Divider between months */
+.div-month { border-right: 2px solid var(--c-primary) !important; }
+
+/* Total columns at the end */
+.h-total-year {
+  text-align: center; font-weight: 600; font-size: 10px;
+  padding: 5px 6px;
+}
+.h-total-2025 { background: var(--c-2025) !important; color: white !important; }
+.h-total-2026 { background: var(--c-2026) !important; color: #1a1a1a !important; }
+.h-total-2027 { background: var(--c-2027) !important; color: white !important; }
+
+.total-25 { background: var(--c-2025-25); color: #034e6c; font-weight: 600; text-align: right; }
+.total-26 { background: var(--c-2026-25); color: #3a5a18; font-weight: 600; text-align: right; }
+.total-27 { background: var(--c-2027-25); color: #3d1858; font-weight: 600; text-align: right; }
+
+/* Total row */
+.row-totals td {
+  background: var(--bg-secondary) !important;
+  font-weight: 600;
+  font-size: 11px;
+}
+.row-totals .sticky-col { background: var(--bg-secondary) !important; }
+.row-totals .total-27 { background: var(--c-2027) !important; color: white !important; }
+.row-totals .total-26 { background: var(--c-2026) !important; color: #1a1a1a !important; }
+.row-totals .total-25 { background: var(--c-2025) !important; color: white !important; }
+
+/* Precio editable */
+.precio-editable {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #FFFAEF; border-radius: 3px;
+  padding: 2px 6px; border: 0.5px solid var(--c-warning);
+}
+.precio-editable input {
+  width: 55px; border: none; background: transparent;
+  font-family: inherit; font-size: 11px; text-align: right; color: var(--c-warning); font-weight: 500;
+}
+.precio-editable input:focus { outline: none; }
+
+.client-name { font-weight: 500; font-size: 12px; }
+.sku-name { font-size: 11px; color: var(--text-secondary); }
+
+.tag-new {
+  display: inline-block;
+  background: var(--c-warning); color: white;
+  padding: 1px 6px; border-radius: 3px;
+  font-size: 9px; margin-left: 4px; font-weight: 500;
+}
+
+.no-history {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-style: italic;
+  font-size: 10px;
+  background: var(--bg-secondary);
+}
+
+/* Legend */
+.legend {
+  margin-top: 16px; padding: 12px 16px;
+  background: var(--bg-primary); border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-tertiary);
+  font-size: 12px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center;
+}
+.legend-color {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 3px; vertical-align: middle; margin-right: 6px;
+}
+
+.note {
+  margin-top: 16px; padding: 12px 16px;
+  background: #FFF4E5; color: #6B3D04;
+  border-radius: var(--radius-md); font-size: 12px;
+  border-left: 3px solid var(--c-warning);
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-title">
+      <i class="ti ti-target" style="font-size: 22px;"></i>
+      <div>
+        <h1>Cuota de Venta · 2027</h1>
+        <div class="breadcrumb">Proyecto Atlas · Servicios Quirúrgicos · Ventas</div>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-avatar">JP</div>
+      <div>
+        <div style="font-weight: 500;">Juan Pérez</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.7);">Vendedor · Línea Quirúrgicos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Mi cuota 2027</div>
+    <div class="tab">Historial de cambios</div>
+  </div>
+
+  <div class="status-banner">
+    <div>
+      <span class="status-badge">BORRADOR</span>
+      Capturando cuota 2027 · Última edición hace 3 minutos
+      <span class="saved-indicator"><i class="ti ti-circle-check"></i> Todos los cambios guardados</span>
+    </div>
+    <div style="font-size: 11px; color: var(--text-tertiary);">
+      Período de captura abierto por IDN
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <i class="ti ti-filter" style="font-size: 18px; color: var(--text-secondary);"></i>
+      <select><option>Todos los clientes</option></select>
+      <select><option>Todos los segmentos</option></select>
+      <select><option>Todas las categorías</option></select>
+    </div>
+    <div class="toolbar-right">
+      <button><i class="ti ti-download"></i> Exportar Excel</button>
+      <button><i class="ti ti-plus"></i> Agregar cliente / SKU</button>
+      <button class="primary"><i class="ti ti-send"></i> Enviar al gerente</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label">Venta 2025</div><div class="stat-value">Q 2,145,000</div></div>
+    <div class="stat-card"><div class="stat-label">Venta 2026 (proy.)</div><div class="stat-value">Q 2,420,000</div></div>
+    <div class="stat-card"><div class="stat-label">Cuota 2027 propuesta</div><div class="stat-value cuota">Q 2,810,000</div></div>
+    <div class="stat-card"><div class="stat-label">Crecimiento vs 2026</div><div class="stat-value positive">+16.1%</div></div>
+    <div class="stat-card"><div class="stat-label">Clientes / SKUs</div><div class="stat-value">12 / 28</div></div>
+  </div>
+
+  <div class="scroll-hint">
+    <i class="ti ti-arrows-horizontal"></i> Desplazar horizontal · Las 3 primeras columnas y los totales al final se mantienen visibles
+  </div>
+
+  <div class="grid-container">
+    <div class="grid-scroll">
+      <table class="grid-table" id="grid"></table>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span style="font-weight: 500;">Años:</span>
+    <span><span class="legend-color" style="background: var(--c-2025);"></span>2025 · Año anterior (lectura)</span>
+    <span><span class="legend-color" style="background: var(--c-2026);"></span>2026 · Año en curso (lectura)</span>
+    <span><span class="legend-color" style="background: var(--c-2027);"></span>2027 · Cuota a capturar</span>
+    <span style="margin-left: auto;"><span class="legend-color" style="background: #FFFAEF; border: 1px solid var(--c-warning);"></span>Celda editable (unidades y precio)</span>
+  </div>
+
+  <div class="note">
+    <strong>Boceto v2 — pendiente de discutir:</strong> Vista del gerente (bandeja de aprobación, consolidado, dashboard), pestaña de historial de cambios, flujo de aprobación gerente → IDN, manejo de notificaciones al rechazar/modificar.
+  </div>
+
+</div>
+
+<script>
+const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+// Datos de ejemplo
+const data = [
+  {
+    cliente: 'Hospital Roosevelt',
+    sku: 'SKU-1001 · Guante quirúrgico M',
+    precio: 55.20,
+    isNew: false,
+    h2025: [{u:38,q:1995},{u:36,q:1890},{u:41,q:2152},{u:39,q:2047},{u:42,q:2205},{u:40,q:2100},{u:38,q:1995},{u:37,q:1942},{u:41,q:2152},{u:43,q:2257},{u:45,q:2362},{u:48,q:2520}],
+    h2026: [{u:42,q:2310},{u:40,q:2200},{u:45,q:2475},{u:43,q:2365},{u:46,q:2530},{u:44,q:2420},{u:42,q:2310},{u:41,q:2255},{u:45,q:2475},{u:47,q:2585},{u:50,q:2750},{u:52,q:2860}],
+    cuota: [48,46,50,48,52,50,48,47,51,53,56,58]
+  },
+  {
+    cliente: 'Hospital Roosevelt',
+    sku: 'SKU-1002 · Guante quirúrgico L',
+    precio: 62.00,
+    isNew: false,
+    h2025: [{u:32,q:1984},{u:30,q:1860},{u:35,q:2170},{u:33,q:2046},{u:36,q:2232},{u:34,q:2108},{u:32,q:1984},{u:31,q:1922},{u:35,q:2170},{u:37,q:2294},{u:39,q:2418},{u:42,q:2604}],
+    h2026: [{u:36,q:2232},{u:34,q:2108},{u:38,q:2356},{u:36,q:2232},{u:39,q:2418},{u:37,q:2294},{u:35,q:2170},{u:34,q:2108},{u:38,q:2356},{u:40,q:2480},{u:42,q:2604},{u:45,q:2790}],
+    cuota: [42,40,44,42,45,43,41,40,44,46,48,50]
+  },
+  {
+    cliente: 'Sanatorio Hermano Pedro',
+    sku: 'SKU-1001 · Guante quirúrgico M',
+    precio: 55.00,
+    isNew: false,
+    h2025: [{u:28,q:1540},{u:26,q:1430},{u:30,q:1650},{u:29,q:1595},{u:31,q:1705},{u:30,q:1650},{u:28,q:1540},{u:27,q:1485},{u:30,q:1650},{u:32,q:1760},{u:34,q:1870},{u:36,q:1980}],
+    h2026: [{u:32,q:1760},{u:30,q:1650},{u:33,q:1815},{u:32,q:1760},{u:35,q:1925},{u:33,q:1815},{u:31,q:1705},{u:30,q:1650},{u:34,q:1870},{u:36,q:1980},{u:38,q:2090},{u:40,q:2200}],
+    cuota: [38,36,40,38,41,39,37,36,40,42,44,46]
+  },
+  {
+    cliente: 'Centro Médico Privado',
+    sku: 'SKU-1001 · Guante quirúrgico M',
+    precio: 60.00,
+    isNew: true,
+    h2025: null,
+    h2026: null,
+    cuota: [20,22,25,25,28,28,30,30,32,32,35,35]
+  }
+];
+
+function fmt(n) { return n.toLocaleString('es-GT'); }
+function fmtQ(n) { return 'Q ' + n.toLocaleString('es-GT', {minimumFractionDigits: 0, maximumFractionDigits: 0}); }
+
+const grid = document.getElementById('grid');
+
+// THEAD
+let thead = '<thead>';
+// Row 1: sticky labels + month groups + totals
+thead += '<tr>';
+thead += '<th class="sticky-col sticky-col-1" rowspan="3">Cliente</th>';
+thead += '<th class="sticky-col sticky-col-2" rowspan="3">SKU</th>';
+thead += '<th class="sticky-col sticky-col-3 last" rowspan="3">Precio<br>promedio</th>';
+months.forEach(m => {
+  thead += `<th class="h-month div-month" colspan="6">${m}</th>`;
+});
+thead += '<th class="h-total-year h-total-2025" colspan="2">Total 2025</th>';
+thead += '<th class="h-total-year h-total-2026" colspan="2">Total 2026</th>';
+thead += '<th class="h-total-year h-total-2027" colspan="2">Total 2027</th>';
+thead += '</tr>';
+
+// Row 2: years per month
+thead += '<tr>';
+months.forEach((m, i) => {
+  thead += '<th class="h-year-2025 div-year" colspan="2">2025</th>';
+  thead += '<th class="h-year-2026 div-year" colspan="2">2026</th>';
+  thead += `<th class="h-year-2027 ${i===11 ? 'div-month' : 'div-year'}" colspan="2">2027</th>`;
+});
+thead += '</tr>';
+
+// Row 3: Un | Q
+thead += '<tr>';
+months.forEach((m, i) => {
+  thead += '<th class="h-sub-2025">Un</th><th class="h-sub-2025 div-year">Q</th>';
+  thead += '<th class="h-sub-2026">Un</th><th class="h-sub-2026 div-year">Q</th>';
+  thead += `<th class="h-sub-2027">Un</th><th class="h-sub-2027 ${i===11 ? 'div-month' : 'div-year'}">Q</th>`;
+});
+thead += '<th class="h-sub-2025">Un</th><th class="h-sub-2025 div-year">Q</th>';
+thead += '<th class="h-sub-2026">Un</th><th class="h-sub-2026 div-year">Q</th>';
+thead += '<th class="h-sub-2027">Un</th><th class="h-sub-2027">Q</th>';
+thead += '</tr>';
+thead += '</thead>';
+
+grid.innerHTML += thead;
+
+// TBODY
+let tbody = '<tbody>';
+let monthTotals2025 = Array(12).fill(0), monthTotals2026 = Array(12).fill(0), monthTotals2027U = Array(12).fill(0), monthTotals2027Q = Array(12).fill(0);
+let totalU25=0, totalQ25=0, totalU26=0, totalQ26=0, totalU27=0, totalQ27=0;
+
+data.forEach(row => {
+  let tr = '<tr>';
+  tr += `<td class="sticky-col sticky-col-1"><span class="client-name">${row.cliente}${row.isNew ? '<span class="tag-new">NUEVO</span>' : ''}</span></td>`;
+  tr += `<td class="sticky-col sticky-col-2"><span class="sku-name">${row.sku}</span></td>`;
+  tr += `<td class="sticky-col sticky-col-3 last"><div class="precio-editable"><span>Q</span><input type="number" value="${row.precio.toFixed(2)}" step="0.01"></div></td>`;
+
+  let rowU25=0, rowQ25=0, rowU26=0, rowQ26=0, rowU27=0, rowQ27=0;
+
+  for (let i = 0; i < 12; i++) {
+    // 2025
+    if (row.h2025) {
+      tr += `<td class="cell-un c-2025">${fmt(row.h2025[i].u)}</td>`;
+      tr += `<td class="cell-q c-2025 div-year">${fmt(row.h2025[i].q)}</td>`;
+      rowU25 += row.h2025[i].u; rowQ25 += row.h2025[i].q;
+      monthTotals2025[i] = (monthTotals2025[i] || 0) + row.h2025[i].q;
+    } else {
+      tr += `<td class="c-2025" style="text-align:center;color:var(--text-tertiary);font-size:10px;">—</td>`;
+      tr += `<td class="c-2025 div-year" style="text-align:center;color:var(--text-tertiary);font-size:10px;">—</td>`;
+    }
+    // 2026
+    if (row.h2026) {
+      tr += `<td class="cell-un c-2026">${fmt(row.h2026[i].u)}</td>`;
+      tr += `<td class="cell-q c-2026 div-year">${fmt(row.h2026[i].q)}</td>`;
+      rowU26 += row.h2026[i].u; rowQ26 += row.h2026[i].q;
+      monthTotals2026[i] = (monthTotals2026[i] || 0) + row.h2026[i].q;
+    } else {
+      tr += `<td class="c-2026" style="text-align:center;color:var(--text-tertiary);font-size:10px;">—</td>`;
+      tr += `<td class="c-2026 div-year" style="text-align:center;color:var(--text-tertiary);font-size:10px;">—</td>`;
+    }
+    // 2027 (editable U + calculated Q)
+    const u27 = row.cuota[i];
+    const q27 = Math.round(u27 * row.precio);
+    tr += `<td class="cell-input"><input type="number" value="${u27}"></td>`;
+    tr += `<td class="cell-calc ${i===11 ? 'div-month' : 'div-year'}">${fmt(q27)}</td>`;
+    rowU27 += u27; rowQ27 += q27;
+    monthTotals2027U[i] = (monthTotals2027U[i] || 0) + u27;
+    monthTotals2027Q[i] = (monthTotals2027Q[i] || 0) + q27;
+  }
+
+  // Totals per row
+  if (row.h2025) {
+    tr += `<td class="total-25">${fmt(rowU25)}</td><td class="total-25 div-year">${fmtQ(rowQ25)}</td>`;
+  } else {
+    tr += `<td class="total-25" style="color:var(--text-tertiary);">—</td><td class="total-25 div-year" style="color:var(--text-tertiary);">—</td>`;
+  }
+  if (row.h2026) {
+    tr += `<td class="total-26">${fmt(rowU26)}</td><td class="total-26 div-year">${fmtQ(rowQ26)}</td>`;
+  } else {
+    tr += `<td class="total-26" style="color:var(--text-tertiary);">—</td><td class="total-26 div-year" style="color:var(--text-tertiary);">—</td>`;
+  }
+  tr += `<td class="total-27">${fmt(rowU27)}</td><td class="total-27">${fmtQ(rowQ27)}</td>`;
+
+  tr += '</tr>';
+  tbody += tr;
+
+  totalU25 += rowU25; totalQ25 += rowQ25;
+  totalU26 += rowU26; totalQ26 += rowQ26;
+  totalU27 += rowU27; totalQ27 += rowQ27;
+});
+
+// Total row
+let totalRow = '<tr class="row-totals">';
+totalRow += '<td class="sticky-col sticky-col-1" colspan="3" style="left:0;min-width:470px;"><strong>TOTAL · Todos los clientes</strong></td>';
+for (let i = 0; i < 12; i++) {
+  totalRow += `<td colspan="2" class="cell-q c-2025 div-year" style="text-align:right;font-weight:600;">${fmt(monthTotals2025[i] || 0)}</td>`;
+  totalRow += `<td colspan="2" class="cell-q c-2026 div-year" style="text-align:right;font-weight:600;">${fmt(monthTotals2026[i] || 0)}</td>`;
+  totalRow += `<td class="cell-un c-2027" style="text-align:right;font-weight:600;color:var(--c-2027);">${fmt(monthTotals2027U[i] || 0)}</td>`;
+  totalRow += `<td class="cell-calc ${i===11 ? 'div-month' : 'div-year'}" style="font-weight:600;">${fmt(monthTotals2027Q[i] || 0)}</td>`;
+}
+totalRow += `<td class="total-25">${fmt(totalU25)}</td><td class="total-25 div-year">${fmtQ(totalQ25)}</td>`;
+totalRow += `<td class="total-26">${fmt(totalU26)}</td><td class="total-26 div-year">${fmtQ(totalQ26)}</td>`;
+totalRow += `<td class="total-27">${fmt(totalU27)}</td><td class="total-27">${fmtQ(totalQ27)}</td>`;
+totalRow += '</tr>';
+tbody += totalRow;
+
+tbody += '</tbody>';
+grid.innerHTML += tbody;
+</script>
+
+</body>
+</html>
